@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.viu.actividad1_android.activities.Screen1
-import com.viu.actividad1_android.activities.Screen2
+import com.viu.actividad1_android.activities.activity2MVVM.Screen2
 import com.viu.actividad1_android.activities.Screen3
 
 @Composable
