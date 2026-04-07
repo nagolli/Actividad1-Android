@@ -17,7 +17,7 @@ fun LateralMenu(
     closeDrawer: () -> Unit
 ) {
     val items = listOf(
-        MenuItem("Úrsula", InterfaceDefinitions.Screen1.route),
+        MenuItem("Úrsula", InterfaceDefinitions.ProductGrid.route),
         MenuItem("Nacho", InterfaceDefinitions.Screen2.route),
         MenuItem("Vicente", InterfaceDefinitions.Screen3.route)
     )

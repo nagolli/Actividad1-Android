@@ -21,7 +21,7 @@ fun Screen3(navController: NavController) {
             )
             NavButton(
                 text = "Siguiente",
-                route = InterfaceDefinitions.Screen1.route,
+                route = InterfaceDefinitions.ProductGrid.route,
                 navController = navController
             )
         }
