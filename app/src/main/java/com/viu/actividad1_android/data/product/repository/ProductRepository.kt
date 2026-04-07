@@ -5,7 +5,7 @@ import com.viu.actividad1_android.data.product.mapper.toDomain
 import com.viu.actividad1_android.data.product.remote.ProductRemoteDataSource
 import com.viu.actividad1_android.data.product.remote.dto.ProductFilterDto
 
-class ProductRepository(
+open class ProductRepository(
     private val remote: ProductRemoteDataSource
 ) {
 

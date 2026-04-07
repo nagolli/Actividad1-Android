@@ -13,6 +13,10 @@ import androidx.navigation.compose.rememberNavController
 import com.viu.actividad1_android.activities.productGrid.ProductGrid
 import com.viu.actividad1_android.activities.activity2MVVM.Screen2
 import com.viu.actividad1_android.activities.Screen3
+import com.viu.actividad1_android.activities.productGrid.ProductGridScreen
+import com.viu.actividad1_android.activities.productGrid.ProductGridViewModel
+import com.viu.actividad1_android.data.product.repository.FakeProductRemoteDataSource
+import com.viu.actividad1_android.data.product.repository.ProductRepository
 import com.viu.actividad1_android.ui.topMenu.TopMenu
 import kotlinx.coroutines.launch
 
@@ -38,7 +42,17 @@ fun AppNavigation() {
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(InterfaceDefinitions.ProductGrid.route) {
-                    ProductGrid(navController)
+
+                    val viewModel = ProductGridViewModel(
+                        repository = ProductRepository(
+                            remote = FakeProductRemoteDataSource()
+                        )
+                    )
+
+                    ProductGridScreen(
+                        viewModel = viewModel,
+                        onProductClick = { }
+                    )
                 }
                 composable(InterfaceDefinitions.Screen2.route) {
                     Screen2(navController)
