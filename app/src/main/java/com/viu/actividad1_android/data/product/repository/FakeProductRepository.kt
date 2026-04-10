@@ -2,6 +2,7 @@ package com.viu.actividad1_android.data.product.repository
 
 import com.viu.actividad1_android.data.product.remote.FakeProductApi
 import com.viu.actividad1_android.data.product.remote.ProductRemoteDataSource
+import com.viu.actividad1_android.data.product.remote.dto.ProductDto
 import com.viu.actividad1_android.data.product.remote.dto.ProductFilterDto
 
 
@@ -17,5 +18,22 @@ class FakeProductRemoteDataSource :
 
     override suspend fun getById(id: Int) = super.getById(id)
 
-    override suspend fun filter(body: ProductFilterDto) = super.filter(body)
+    override suspend fun filter(body: ProductFilterDto): List<ProductDto> {
+        return getAll().filter { product ->
+
+            val matchesName = body.name.isNullOrBlank() ||
+                    product.name.contains(body.name, ignoreCase = true)
+
+            /*val matchesCategory = body.category.isNullOrBlank() ||
+                    product.category == body.category
+
+            val matchesSupplier = body.supplier.isNullOrBlank() ||
+                    product.supplier == body.supplier*/
+
+            val matchesMin = body.min == null || product.price >= body.min
+            val matchesMax = body.max == null || product.price <= body.max
+
+            matchesName && /*matchesCategory && matchesSupplier &&*/ matchesMin && matchesMax
+        }
+    }
 }

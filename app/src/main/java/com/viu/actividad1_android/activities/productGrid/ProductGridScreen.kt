@@ -14,11 +14,15 @@ fun ProductGridScreen(
     val state = viewModel.state
 
     Column {
-        /*ProductFilters(
-            filter = state.filter,
-            onFilterChange = { viewModel.onEvent(ProductGridEvent.OnFilterChanged(it)) },
-            onApply = { viewModel.onEvent(ProductGridEvent.ApplyFilters) }
-        )*/
+        CollapsibleFilters {
+            ProductFilters(
+                filter = state.filter,
+                onFilterChange = { viewModel.onEvent(ProductGridEvent.OnFilterChanged(it)) },
+                categories = state.categories,
+                suppliers = state.suppliers,
+                maxPrice = state.maxPrice
+            )
+        }
 
         ProductGrid(
             products = state.products,

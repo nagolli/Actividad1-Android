@@ -14,5 +14,8 @@ data class ProductGridState(
         supplier = null,
         min = null,
         max = null,
-    )
+    ),
+    val categories: List<String> = emptyList(),
+    val suppliers: List<String> = emptyList(),
+    val maxPrice: Float = 0f
 )

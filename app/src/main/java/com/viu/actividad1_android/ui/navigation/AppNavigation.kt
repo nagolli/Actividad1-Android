@@ -7,6 +7,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,6 +16,7 @@ import com.viu.actividad1_android.activities.activity2MVVM.Screen2
 import com.viu.actividad1_android.activities.Screen3
 import com.viu.actividad1_android.activities.productGrid.ProductGridScreen
 import com.viu.actividad1_android.activities.productGrid.ProductGridViewModel
+import com.viu.actividad1_android.activities.productGrid.ProductGridViewModelFactory
 import com.viu.actividad1_android.data.product.repository.FakeProductRemoteDataSource
 import com.viu.actividad1_android.data.product.repository.ProductRepository
 import com.viu.actividad1_android.ui.topMenu.TopMenu
@@ -43,9 +45,11 @@ fun AppNavigation() {
             ) {
                 composable(InterfaceDefinitions.ProductGrid.route) {
 
-                    val viewModel = ProductGridViewModel(
-                        repository = ProductRepository(
-                            remote = FakeProductRemoteDataSource()
+                    val viewModel: ProductGridViewModel = viewModel(
+                        factory = ProductGridViewModelFactory(
+                            ProductRepository(
+                                remote = FakeProductRemoteDataSource()
+                            )
                         )
                     )
 
@@ -54,6 +58,7 @@ fun AppNavigation() {
                         onProductClick = { }
                     )
                 }
+
                 composable(InterfaceDefinitions.Screen2.route) {
                     Screen2(navController)
                 }
