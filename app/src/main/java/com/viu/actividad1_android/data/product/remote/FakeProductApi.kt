@@ -9,10 +9,10 @@ class FakeProductApi  : ProductApi {
     private val mockProducts = listOf(
         ProductDto(1, "Catan", 35.0, "", 100, null,false, 1, 1),
         ProductDto(2, "Carcassonne", 25.0, "", 100, null,false, 1, 1),
-        ProductDto(3, "Dixit", 30.0, "", 100, null,false, 1, 1),
-        ProductDto(4, "Virus!", 12.0, "", 100, null,false, 1, 1),
-        ProductDto(5, "Terraforming Mars", 60.0, "", 100, null,false, 1, 1),
-        ProductDto(6, "Exploding Kittens", 20.0, "", 100, null,false, 1, 1)
+        ProductDto(3, "Dixit", 30.0, "", 100, null,false, 1, 2),
+        ProductDto(4, "Virus!", 12.0, "", 100, null,false, 1, 3),
+        ProductDto(5, "Terraforming Mars", 60.0, "", 100, null,false, 1, 4),
+        ProductDto(6, "Exploding Kittens", 20.0, "", 100, null,false, 1, 2)
     )
 
     override suspend fun getAllProducts(): List<ProductDto> = mockProducts

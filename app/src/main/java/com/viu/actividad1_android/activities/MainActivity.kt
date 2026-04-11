@@ -12,6 +12,7 @@ import com.viu.actividad1_android.ui.theme.Actividad1AndroidTheme
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        println("🔥 [CHECK] onCreate ejecutado")
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {

@@ -11,16 +11,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.viu.actividad1_android.activities.productGrid.ProductGrid
 import com.viu.actividad1_android.activities.activity2MVVM.Screen2
 import com.viu.actividad1_android.activities.Screen3
 import com.viu.actividad1_android.activities.productGrid.ProductGridScreen
 import com.viu.actividad1_android.activities.productGrid.ProductGridViewModel
 import com.viu.actividad1_android.activities.productGrid.ProductGridViewModelFactory
-import com.viu.actividad1_android.data.product.repository.FakeProductRemoteDataSource
+import com.viu.actividad1_android.data.category.repository.CategoryRepository
+import com.viu.actividad1_android.data.category.repository.categoryFakeOrHttpDataSource
+import com.viu.actividad1_android.data.supplier.repository.SupplierRepository
+import com.viu.actividad1_android.data.supplier.repository.supplierFakeOrHttpDataSource
 import com.viu.actividad1_android.data.product.repository.ProductRepository
+import com.viu.actividad1_android.data.product.repository.productFakeOrHttpDataSource
 import com.viu.actividad1_android.ui.topMenu.TopMenu
-import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavigation() {
@@ -47,16 +49,21 @@ fun AppNavigation() {
 
                     val viewModel: ProductGridViewModel = viewModel(
                         factory = ProductGridViewModelFactory(
-                            ProductRepository(
-                                remote = FakeProductRemoteDataSource()
+                            products = ProductRepository(
+                                remote = productFakeOrHttpDataSource()
+                            ),
+                            categories = CategoryRepository(
+                                remote = categoryFakeOrHttpDataSource()
+                            ),
+                            suppliers = SupplierRepository(
+                                remote = supplierFakeOrHttpDataSource()
                             )
                         )
                     )
 
                     ProductGridScreen(
                         viewModel = viewModel,
-                        onProductClick = { }
-                    )
+                    ) { }
                 }
 
                 composable(InterfaceDefinitions.Screen2.route) {
