@@ -25,7 +25,6 @@ class FakeCategoryRepository : CategoryRepository(
 class FakeCategoryRemoteDataSource :
     CategoryRemoteDataSource(api = FakeCategoryApi()) {
 
-    // Si quieres, puedes sobrescribir métodos:
     override suspend fun getAll() = super.getAll()
 
     override suspend fun getById(id: Int) = super.getById(id)

@@ -24,7 +24,6 @@ class FakeSupplierRepository : SupplierRepository(
 class FakeSupplierRemoteDataSource :
     SupplierRemoteDataSource(api = FakeSupplierApi()) {
 
-    // Si quieres, puedes sobrescribir métodos:
     override suspend fun getAll() = super.getAll()
 
     override suspend fun getById(id: Int) = super.getById(id)
