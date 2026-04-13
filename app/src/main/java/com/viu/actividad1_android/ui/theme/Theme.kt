@@ -15,18 +15,22 @@ import androidx.compose.ui.platform.LocalContext
 val LudoplanetPrimary = Color(0xFFAEC8A3)
 val LudoplanetIcons = Color(0xFF3B3D1C)
 
+val LudoplanetCardLight = Color(0xFFF7F7F2)
+
 private val DarkColorScheme = darkColorScheme(
     primary = LudoplanetPrimary,
     onPrimary = LudoplanetIcons,
     secondary = PurpleGrey80,
-    tertiary = Pink80
+    tertiary = Pink80,
+    surfaceVariant = LudoplanetCardLight //Todo definir oscuro
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = LudoplanetPrimary,
     onPrimary = LudoplanetIcons,
     secondary = PurpleGrey40,
-    tertiary = Pink40
+    tertiary = Pink40,
+    surfaceVariant = LudoplanetCardLight
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

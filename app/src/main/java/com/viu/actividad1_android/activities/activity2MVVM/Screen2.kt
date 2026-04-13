@@ -31,7 +31,7 @@ fun Screen2(
             )
             NavButton(
                 text = "Siguiente",
-                route = InterfaceDefinitions.Screen3.route,
+                route = InterfaceDefinitions.OrderList.route,
                 navController = navController
             )
         }

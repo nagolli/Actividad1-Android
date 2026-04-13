@@ -10,11 +10,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.viu.actividad1_android.activities.activity2MVVM.Screen2
 import com.viu.actividad1_android.activities.Screen3
+import com.viu.actividad1_android.activities.ordersList.OrderListScreen
+import com.viu.actividad1_android.activities.ordersList.OrderListViewModel
+import com.viu.actividad1_android.activities.ordersList.OrderListViewModelFactory
 import com.viu.actividad1_android.activities.productGrid.ProductGridScreen
 import com.viu.actividad1_android.activities.productGrid.ProductGridViewModel
 import com.viu.actividad1_android.activities.productGrid.ProductGridViewModelFactory
 import com.viu.actividad1_android.data.category.repository.CategoryRepository
 import com.viu.actividad1_android.data.category.repository.categoryFakeOrHttpDataSource
+import com.viu.actividad1_android.data.order.repository.OrderRepository
+import com.viu.actividad1_android.data.order.repository.orderFakeOrHttpDataSource
 import com.viu.actividad1_android.data.product.repository.ProductRepository
 import com.viu.actividad1_android.data.product.repository.productFakeOrHttpDataSource
 import com.viu.actividad1_android.data.supplier.repository.SupplierRepository
@@ -37,7 +42,7 @@ fun AppNavigation() {
             TopMenu(
                 onChessClick = { navController.navigate(InterfaceDefinitions.ProductGrid.route) },
                 onCartClick = { navController.navigate(InterfaceDefinitions.Screen2.route) },
-                onUserClick = { navController.navigate(InterfaceDefinitions.Screen3.route) }
+                onUserClick = { navController.navigate(InterfaceDefinitions.OrderList.route) }
             )
         }
     ) { innerPadding ->
@@ -71,8 +76,17 @@ fun AppNavigation() {
             }
 
             // Pantalla: Historial de pedidos
-            composable(InterfaceDefinitions.Screen3.route) {
-                Screen3(navController)
+            composable(InterfaceDefinitions.OrderList.route) {
+
+                val viewModel: OrderListViewModel = viewModel(
+                    factory = OrderListViewModelFactory(
+                        orders = OrderRepository(remote = orderFakeOrHttpDataSource())
+                    )
+                )
+
+                OrderListScreen(
+                    viewModel = viewModel
+                )
             }
         }
     }

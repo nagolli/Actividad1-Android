@@ -14,10 +14,16 @@ import com.viu.actividad1_android.data.product.Product
  * @param date Fecha del pedido en formato de cadena.
  * @param state Estado actual del pedido.
  * @param products Lista de productos asociados al pedido en formato de dominio.
+ * @property totalPrice Suma de precios de los productos.
  */
 data class Order(
     val id: Int,
     val date: String,
     val state: String,
     val products: List<Product>
-)
+) {
+    fun totalPrice(): Double {
+        return products.sumOf { it.price * it.quantity }
+    }
+
+}

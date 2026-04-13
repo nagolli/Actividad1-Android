@@ -15,7 +15,7 @@ sealed class InterfaceDefinitions(val route: String) {
 
     object Screen2 : InterfaceDefinitions("screen_2")
 
-    object Screen3 : InterfaceDefinitions("screen_3")
+    object OrderList : InterfaceDefinitions("order_list")
 
     /**
      * Ejemplo de pantalla con parámetro.

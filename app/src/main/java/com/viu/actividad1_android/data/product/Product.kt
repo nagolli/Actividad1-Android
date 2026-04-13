@@ -11,7 +11,8 @@ package com.viu.actividad1_android.data.product
  * @param id Identificador único del producto.
  * @param name Nombre del producto.
  * @param price Precio del producto.
- * @param stock Cantidad disponible en inventario.
+ * @param stock Cantidad disponible en inventario. 0 si es página de pedido.
+ * @param quantity Cantidad en un pedido. 0 es página de stock.
  * @param imageUrl URL de la imagen del producto, si está disponible.
  */
 data class Product(
@@ -19,5 +20,6 @@ data class Product(
     val name: String,
     val price: Double,
     val stock: Int,
+    val quantity: Int,
     val imageUrl: String?
 )

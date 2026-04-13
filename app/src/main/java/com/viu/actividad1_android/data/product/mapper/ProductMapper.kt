@@ -15,5 +15,6 @@ fun ProductDto.toDomain() = Product(
     name = name,
     price = price,
     stock = stock,
+    quantity = 0,
     imageUrl = image
 )

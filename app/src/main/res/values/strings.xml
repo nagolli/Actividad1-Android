@@ -4,6 +4,12 @@
     <!-- Product Grid -->
     <string name="filters_title">Filtros</string>
 
+    <!--OrderList-->
+    <string name="orders_title">Pedidos</string>
+    <string name="orders_total">Total:</string>
+    <string name="orders_date">Fecha:</string>
+    <string name="orders_hour">Hora:</string>
+
     <!-- Filters -->
     <string name="filter_name_label">Nombre</string>
     <string name="filter_category_label">Categoría</string>
