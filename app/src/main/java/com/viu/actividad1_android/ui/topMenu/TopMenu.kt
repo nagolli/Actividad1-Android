@@ -46,31 +46,43 @@ fun TopMenu(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = stringResource(R.string.topmenu_logo_description),
                 modifier = Modifier
-                    .size(160.dp)
+                    .size(200.dp)
                     .padding(0.dp)
             )
         },
-        modifier = Modifier.height(80.dp),
+        modifier = Modifier.height(100.dp),
         actions = {
 
-            IconButton(onClick = onChessClick) {
+            IconButton(
+                onClick = onChessClick,
+                modifier = Modifier.size(56.dp)
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Extension,
-                    contentDescription = stringResource(R.string.topmenu_products_description)
+                    contentDescription = stringResource(R.string.topmenu_products_description),
+                    modifier = Modifier.size(32.dp)
                 )
             }
 
-            IconButton(onClick = onCartClick) {
+            IconButton(
+                onClick = onCartClick,
+                modifier = Modifier.size(56.dp)
+            ) {
                 Icon(
                     imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = stringResource(R.string.topmenu_cart_description)
+                    contentDescription = stringResource(R.string.topmenu_cart_description),
+                    modifier = Modifier.size(32.dp)
                 )
             }
 
-            IconButton(onClick = onUserClick) {
+            IconButton(
+                onClick = onUserClick,
+                modifier = Modifier.size(56.dp)
+            ) {
                 Icon(
                     imageVector = Icons.Default.Person,
-                    contentDescription = stringResource(R.string.topmenu_user_description)
+                    contentDescription = stringResource(R.string.topmenu_user_description),
+                    modifier = Modifier.size(32.dp)
                 )
             }
         },
