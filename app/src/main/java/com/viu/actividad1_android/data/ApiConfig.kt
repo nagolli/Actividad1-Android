@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 object ApiConfig {
 
     /** URL base del backend real. */
-    const val BASE_URL = "https://10.0.2.2:8443/api/"
+    const val BASE_URL = "http://10.0.2.2:8000/api/"
 
     /** Endpoint usado para comprobar disponibilidad del backend. */
     private const val HEALTHCHECK_URL = "${BASE_URL}permission"
