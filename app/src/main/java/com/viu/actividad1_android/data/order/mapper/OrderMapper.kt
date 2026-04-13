@@ -32,5 +32,6 @@ fun OrderProductDto.toDomainProduct(localProduct: Product?) = Product(
     price = price,
     stock = localProduct?.stock ?: 0,
     quantity = quantity,
+    description = localProduct?.description,
     imageUrl = localProduct?.imageUrl
 )

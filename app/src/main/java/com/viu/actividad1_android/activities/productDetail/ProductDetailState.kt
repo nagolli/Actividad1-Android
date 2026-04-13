@@ -12,5 +12,6 @@ import com.viu.actividad1_android.data.product.Product
 data class ProductDetailState(
     val isLoading: Boolean = false,
     val product: Product? = null,
+    val quantity: Int = 1,
     val error: String? = null
 )

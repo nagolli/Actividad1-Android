@@ -5,11 +5,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +38,7 @@ fun ProductDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
+                windowInsets = WindowInsets(0.dp),
                 title = { Text(text = state.product?.name ?: stringResource(R.string.loading)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -91,8 +95,35 @@ fun ProductDetailScreen(
 
                         Spacer(modifier = Modifier.height(24.dp))
 
+                        // Selector de cantidad
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.product_detail_quantity_label),
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.weight(1f)
+                            )
+
+                            IconButton(onClick = { viewModel.onEvent(ProductDetailEvent.OnQuantityChanged(state.quantity - 1)) }) {
+                                Icon(Icons.Default.Remove, contentDescription = null)
+                            }
+
+                            Text(
+                                text = state.quantity.toString(),
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            IconButton(onClick = { viewModel.onEvent(ProductDetailEvent.OnQuantityChanged(state.quantity + 1)) }) {
+                                Icon(Icons.Default.Add, contentDescription = null)
+                            }
+                        }
+
                         Button(
-                            onClick = { /* Implementar añadir al carrito si es necesario */ },
+                            onClick = { viewModel.onEvent(ProductDetailEvent.OnAddToCart) },
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             Icon(Icons.Default.ShoppingCart, contentDescription = null)
@@ -108,7 +139,7 @@ fun ProductDetailScreen(
                             fontSize = 18.sp
                         )
                         Text(
-                            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                            text = product.description ?: stringResource(R.string.not_available),
                             fontSize = 14.sp
                         )
                     }

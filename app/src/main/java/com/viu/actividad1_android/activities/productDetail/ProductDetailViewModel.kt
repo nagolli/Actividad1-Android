@@ -9,6 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.viu.actividad1_android.data.product.repository.ProductRepository
 import kotlinx.coroutines.launch
 
+sealed class ProductDetailEvent {
+    data class OnQuantityChanged(val quantity: Int) : ProductDetailEvent()
+    object OnAddToCart : ProductDetailEvent()
+}
+
 /**
  * ViewModel para la pantalla de detalles de producto.
  *
@@ -28,6 +33,19 @@ class ProductDetailViewModel(
 
     init {
         loadProduct()
+    }
+
+    fun onEvent(event: ProductDetailEvent) {
+        when (event) {
+            is ProductDetailEvent.OnQuantityChanged -> {
+                if (event.quantity >= 1) {
+                    state = state.copy(quantity = event.quantity)
+                }
+            }
+            is ProductDetailEvent.OnAddToCart -> {
+                // Lógica de añadir al carrito con state.quantity
+            }
+        }
     }
 
     private fun loadProduct() {

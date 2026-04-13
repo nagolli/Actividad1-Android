@@ -32,7 +32,9 @@
     <!-- Product Detail -->
     <string name="loading">Cargando...</string>
     <string name="product_detail_back">Volver</string>
+    <string name="product_detail_quantity_label">Cantidad:</string>
     <string name="product_detail_add_to_cart">Añadir al carrito</string>
     <string name="product_detail_description_title">Descripción del producto</string>
+    <string name="not_available">No disponible</string>
 
 </resources>
