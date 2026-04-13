@@ -1,24 +1,26 @@
 package com.viu.actividad1_android.activities.productGrid
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import com.viu.actividad1_android.R
+import com.viu.actividad1_android.reusableComponents.CollapsibleSection
 
-//Vista del grid de productos, implementando el patron MVVM.
-//Primero presenta unos filtros y luego el grid de productos filtrados.
+/**
+ * Pantalla principal del grid de productos.
+ *
+ * Implementa el patrón MVVM mostrando primero los filtros disponibles
+ * y posteriormente el grid de productos filtrados. Gestiona los eventos
+ * del usuario enviándolos al ViewModel correspondiente.
+ *
+ * @param viewModel ViewModel asociado a la pantalla.
+ * @param onProductClick Acción que se ejecuta al seleccionar un producto.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductGridScreen(
@@ -26,8 +28,10 @@ fun ProductGridScreen(
     onProductClick: (Int) -> Unit
 ) {
     val state = viewModel.state
-    Column {
-        CollapsibleFilters {
+
+    Column(modifier = Modifier.padding(8.dp)) {
+
+        CollapsibleSection(title = stringResource(R.string.filters_title)) {
             ProductFilters(
                 filter = state.filter,
                 categories = state.categories,
@@ -39,7 +43,10 @@ fun ProductGridScreen(
 
         ProductGrid(
             products = state.products,
-            onProductClick = { id -> viewModel.onEvent(ProductGridEvent.OnProductClick(id)) }
+            onProductClick = { id ->
+                viewModel.onEvent(ProductGridEvent.OnProductClick(id))
+                onProductClick(id)
+            }
         )
     }
 }

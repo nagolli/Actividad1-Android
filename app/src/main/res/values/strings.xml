@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Actividad1-Android</string>
+
+    <!-- Product Grid -->
+    <string name="filters_title">Filtros</string>
+
+    <!-- Filters -->
+    <string name="filter_name_label">Nombre</string>
+    <string name="filter_category_label">Categoría</string>
+    <string name="filter_supplier_label">Proveedor</string>
+    <string name="filter_price_label">Precio (euros)</string>
+
+    <!-- Symbols -->
+    <string name="currency_euro">€</string>
+
+    <!-- Accessibility -->
+    <string name="expand_section_description">Expandir sección</string>
+
+    <!-- Chooser-->
+    <string name="option_any">"Cualquiera"</string>
+    <string name="topmenu_products_description">Productos</string>
+    <string name="topmenu_cart_description">Carrito</string>
+    <string name="topmenu_user_description">Historial</string>
+    <string name="topmenu_logo_description">Logo</string>
+
 </resources>

@@ -5,21 +5,22 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.viu.actividad1_android.ui.navigation.InterfaceDefinitions
 
 /**
  * Menú lateral de la aplicación.
  * Muestra botones para navegar directamente a cada pantalla.
+ * Deprecated -> Usar el TopMenu
  */
 @Composable
 fun LateralMenu(
     navController: NavController,
     closeDrawer: () -> Unit
 ) {
-    val items = listOf(
-        MenuItem("Úrsula", InterfaceDefinitions.ProductGrid.route),
-        MenuItem("Nacho", InterfaceDefinitions.Screen2.route),
-        MenuItem("Vicente", InterfaceDefinitions.Screen3.route)
+    val items = emptyList<MenuItem>(
+        //listOf(
+        //MenuItem("Úrsula", InterfaceDefinitions.ProductGrid.route),
+        //MenuItem("Nacho", InterfaceDefinitions.Screen2.route),
+        //MenuItem("Vicente", InterfaceDefinitions.Screen3.route)
     )
 
     ModalDrawerSheet {

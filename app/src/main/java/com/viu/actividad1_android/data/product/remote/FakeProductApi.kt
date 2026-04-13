@@ -4,24 +4,114 @@ import com.viu.actividad1_android.data.product.remote.api.ProductApi
 import com.viu.actividad1_android.data.product.remote.dto.ProductDto
 import com.viu.actividad1_android.data.product.remote.dto.ProductFilterDto
 
-class FakeProductApi  : ProductApi {
+/**
+ * Implementación fake de [ProductApi] para entornos sin backend disponible.
+ *
+ * Proporciona un conjunto fijo de productos simulados, útil para:
+ * - desarrollo sin conexión
+ * - pruebas locales
+ * - fallback automático cuando el backend no responde
+ *
+ * Devuelve DTOs directamente, dejando el mapeo a dominio en la capa de repositorios.
+ */
+class FakeProductApi : ProductApi {
 
+    /** Datos simulados de productos. */
     private val mockProducts = listOf(
-        ProductDto(1, "Catan", 35.0, "", 100, "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/catan.jpg",false, 1, 1),
-        ProductDto(2, "Carcassonne", 25.0, "", 100, "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/carcassone.jpg",false, 1, 1),
-        ProductDto(3, "Dixit", 30.0, "", 100, "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/dixit.jpg",false, 1, 2),
-        ProductDto(4, "Virus!", 12.0, "", 100, "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/virus.jpg",false, 1, 3),
-        ProductDto(5, "Terraforming Mars", 60.0, "", 100, "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/terraformingMars.jpg",false, 1, 4),
-        ProductDto(6, "Exploding Kittens", 20.0, "", 100, "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/explodingKittens.jpg",false, 1, 2)
+        ProductDto(
+            id = 1,
+            name = "Catan",
+            price = 35.0,
+            description = "",
+            stock = 100,
+            image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/catan.jpg",
+            inactive = false,
+            categoryId = 1,
+            supplierId = 1
+        ),
+        ProductDto(
+            id = 2,
+            name = "Carcassonne",
+            price = 25.0,
+            description = "",
+            stock = 100,
+            image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/carcassone.jpg",
+            inactive = false,
+            categoryId = 1,
+            supplierId = 1
+        ),
+        ProductDto(
+            id = 3,
+            name = "Dixit",
+            price = 30.0,
+            description = "",
+            stock = 100,
+            image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/dixit.jpg",
+            inactive = false,
+            categoryId = 1,
+            supplierId = 2
+        ),
+        ProductDto(
+            id = 4,
+            name = "Virus!",
+            price = 12.0,
+            description = "",
+            stock = 100,
+            image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/virus.jpg",
+            inactive = false,
+            categoryId = 1,
+            supplierId = 3
+        ),
+        ProductDto(
+            id = 5,
+            name = "Terraforming Mars",
+            price = 60.0,
+            description = "",
+            stock = 100,
+            image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/terraformingMars.jpg",
+            inactive = false,
+            categoryId = 1,
+            supplierId = 4
+        ),
+        ProductDto(
+            id = 6,
+            name = "Exploding Kittens",
+            price = 20.0,
+            description = "",
+            stock = 100,
+            image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/explodingKittens.jpg",
+            inactive = false,
+            categoryId = 1,
+            supplierId = 2
+        )
     )
 
     override suspend fun getAllProducts(): List<ProductDto> = mockProducts
 
     override suspend fun getProductById(id: Int): ProductDto =
-        mockProducts.first { it.id == id }
+        mockProducts.firstOrNull { it.id == id }
+            ?: throw IllegalArgumentException("Producto con id $id no encontrado")
 
     override suspend fun filterProducts(body: ProductFilterDto): List<ProductDto> =
-        mockProducts.filter {
-            body.name == null || it.name.contains(body.name, ignoreCase = true)
+        mockProducts.filter { product ->
+            val matchesName =
+                body.name.isNullOrBlank() ||
+                        product.name.contains(body.name, ignoreCase = true)
+
+            val matchesCategory =
+                body.category == null ||
+                        product.categoryId == body.category
+
+            val matchesSupplier =
+                body.supplier == null ||
+                        product.supplierId == body.supplier
+
+            val matchesMin =
+                body.min == null || product.price >= body.min
+
+            val matchesMax =
+                body.max == null || product.price <= body.max
+
+            matchesName && matchesCategory && matchesSupplier && matchesMin && matchesMax
         }
 }

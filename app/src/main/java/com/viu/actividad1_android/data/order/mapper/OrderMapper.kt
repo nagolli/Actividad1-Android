@@ -4,9 +4,12 @@ import com.viu.actividad1_android.data.order.Order
 import com.viu.actividad1_android.data.order.remote.dto.OrderDto
 import com.viu.actividad1_android.data.order.remote.dto.OrderProductDto
 import com.viu.actividad1_android.data.product.Product
-import kotlin.Int
-import kotlin.String
 
+/**
+ * Convierte un OrderDto en un Order de dominio.
+ *
+ * @param currentProducts Lista de productos locales (catálogo completo).
+ */
 fun OrderDto.toDomain(currentProducts: List<Product>) = Order(
     id = id,
     date = date,
@@ -17,10 +20,16 @@ fun OrderDto.toDomain(currentProducts: List<Product>) = Order(
     }
 )
 
-fun OrderProductDto.toDomainProduct(currentProduct: Product?) = Product(
+/**
+ * Convierte un OrderProductDto en un Product de dominio.
+ *
+ * Si el producto existe en el catálogo local, se reutilizan sus datos
+ * (stock, imagen, etc.). Si no existe, se crea un producto mínimo.
+ */
+fun OrderProductDto.toDomainProduct(localProduct: Product?) = Product(
     id = id,
     name = name,
     price = price,
-    stock = currentProduct?.stock ?: 0,
-    imageUrl = currentProduct?.imageUrl
+    stock = localProduct?.stock ?: 0,
+    imageUrl = localProduct?.imageUrl
 )
