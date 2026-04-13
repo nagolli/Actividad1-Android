@@ -5,14 +5,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.viu.actividad1_android.activities.activity2MVVM.Screen2
-import com.viu.actividad1_android.activities.Screen3
 import com.viu.actividad1_android.activities.ordersList.OrderListScreen
 import com.viu.actividad1_android.activities.ordersList.OrderListViewModel
 import com.viu.actividad1_android.activities.ordersList.OrderListViewModelFactory
+import com.viu.actividad1_android.activities.productDetail.ProductDetailScreen
+import com.viu.actividad1_android.activities.productDetail.ProductDetailViewModel
+import com.viu.actividad1_android.activities.productDetail.ProductDetailViewModelFactory
 import com.viu.actividad1_android.activities.productGrid.ProductGridScreen
 import com.viu.actividad1_android.activities.productGrid.ProductGridViewModel
 import com.viu.actividad1_android.activities.productGrid.ProductGridViewModelFactory
@@ -66,7 +70,28 @@ fun AppNavigation() {
 
                 ProductGridScreen(
                     viewModel = viewModel,
-                    onProductClick = { /* Navegación futura a Detalles de producto*/ }
+                    onProductClick = { productId ->
+                        navController.navigate(InterfaceDefinitions.ProductDetail.createRoute(productId))
+                    }
+                )
+            }
+
+            // Pantalla: Detalles de producto
+            composable(
+                route = InterfaceDefinitions.ProductDetail.route,
+                arguments = listOf(navArgument("productId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getInt("productId") ?: 0
+                val viewModel: ProductDetailViewModel = viewModel(
+                    factory = ProductDetailViewModelFactory(
+                        products = ProductRepository(remote = productFakeOrHttpDataSource()),
+                        productId = productId
+                    )
+                )
+
+                ProductDetailScreen(
+                    viewModel = viewModel,
+                    onBack = { navController.popBackStack() }
                 )
             }
 

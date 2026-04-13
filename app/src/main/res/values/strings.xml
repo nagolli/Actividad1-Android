@@ -29,4 +29,10 @@
     <string name="topmenu_user_description">Historial</string>
     <string name="topmenu_logo_description">Logo</string>
 
+    <!-- Product Detail -->
+    <string name="loading">Cargando...</string>
+    <string name="product_detail_back">Volver</string>
+    <string name="product_detail_add_to_cart">Añadir al carrito</string>
+    <string name="product_detail_description_title">Descripción del producto</string>
+
 </resources>

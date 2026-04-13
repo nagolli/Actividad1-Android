@@ -8,53 +8,71 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 /**
- * Configuración centralizada de acceso al backend.
- *
- * Permite comprobar si el backend está disponible y crear instancias
- * de Retrofit para cualquier endpoint, facilitando el uso de datos
- * fake o reales según disponibilidad.
+ * Configuración centralizada de acceso al backend con gestión de estado.
  */
 object ApiConfig {
 
-    /** URL base del backend real. */
+    /** URL base del backend real (10.0.2.2 para el emulador). */
     const val BASE_URL = "http://10.0.2.2:8000/api/"
 
     /** Endpoint usado para comprobar disponibilidad del backend. */
     private const val HEALTHCHECK_URL = "${BASE_URL}permission"
 
-    /** Cliente HTTP con timeout reducido para detección rápida. */
+    /** Estado cacheado de la disponibilidad del backend. Null significa no comprobado. */
+    private var isBackendReachable: Boolean? = null
+
+    /** Cliente HTTP con timeout aumentado para backends lentos (WSL2/Sail). */
     private val client = OkHttpClient.Builder()
-        .connectTimeout(1, TimeUnit.SECONDS)
-        .readTimeout(1, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
         .build()
 
     /**
-     * Comprueba si el backend está disponible realizando una petición rápida.
-     *
-     * @return true si el backend responde con éxito, false en caso contrario.
+     * Comprueba si el backend está disponible (con caché).
      */
     fun isBackendAvailable(): Boolean {
-        Log.d("ApiConfig", "Probando conexión con backend: $HEALTHCHECK_URL")
-
-        val request = Request.Builder()
-            .url(HEALTHCHECK_URL)
-            .build()
-
-        return try {
-            client.newCall(request).execute().use { response ->
-                Log.d("ApiConfig", "HTTP ${response.code} - ${response.message}")
-                response.isSuccessful
-            }
-        } catch (e: Exception) {
-            Log.e("ApiConfig", "Error conectando al backend: ${e.message}")
-            false
+        // ... (resto igual)
+        isBackendReachable?.let {
+            Log.d("ApiConfig", "Usando estado cacheado: $it")
+            return it
         }
+
+        Log.d("ApiConfig", "Iniciando comprobación (timeout 10s): $HEALTHCHECK_URL")
+
+        var success = false
+        val thread = Thread {
+            try {
+                val request = Request.Builder().url(HEALTHCHECK_URL).build()
+                client.newCall(request).execute().use { response ->
+                    success = response.isSuccessful
+                    Log.d("ApiConfig", "Respuesta del servidor: ${response.code}")
+                }
+            } catch (e: Exception) {
+                Log.e("ApiConfig", "Error de conexión (${e.javaClass.simpleName}): ${e.message}")
+            }
+        }
+
+        try {
+            thread.start()
+            // Esperamos hasta 10 segundos a que el back responda
+            thread.join(10000)
+        } catch (e: InterruptedException) {
+            Log.e("ApiConfig", "Comprobación interrumpida")
+        }
+
+        isBackendReachable = success
+        return success
+    }
+
+    /**
+     * Fuerza a que la próxima llamada a isBackendAvailable() realice una petición real.
+     */
+    fun resetCache() {
+        isBackendReachable = null
     }
 
     /**
      * Crea una instancia de Retrofit para el tipo T.
-     *
-     * @param T Interfaz del servicio Retrofit.
      */
     inline fun <reified T> createApi(): T {
         return Retrofit.Builder()

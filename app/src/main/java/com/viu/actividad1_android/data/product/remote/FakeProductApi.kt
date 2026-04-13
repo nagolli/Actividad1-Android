@@ -25,7 +25,7 @@ class FakeProductApi : ProductApi {
             description = "",
             stock = 100,
             image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/catan.jpg",
-            inactive = false,
+            inactive = 0,
             categoryId = 1,
             supplierId = 1
         ),
@@ -36,7 +36,7 @@ class FakeProductApi : ProductApi {
             description = "",
             stock = 100,
             image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/carcassone.jpg",
-            inactive = false,
+            inactive = 0,
             categoryId = 1,
             supplierId = 1
         ),
@@ -47,7 +47,7 @@ class FakeProductApi : ProductApi {
             description = "",
             stock = 100,
             image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/dixit.jpg",
-            inactive = false,
+            inactive = 0,
             categoryId = 1,
             supplierId = 2
         ),
@@ -58,7 +58,7 @@ class FakeProductApi : ProductApi {
             description = "",
             stock = 100,
             image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/virus.jpg",
-            inactive = false,
+            inactive = 0,
             categoryId = 1,
             supplierId = 3
         ),
@@ -69,7 +69,7 @@ class FakeProductApi : ProductApi {
             description = "",
             stock = 100,
             image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/terraformingMars.jpg",
-            inactive = false,
+            inactive = 0,
             categoryId = 1,
             supplierId = 4
         ),
@@ -80,7 +80,7 @@ class FakeProductApi : ProductApi {
             description = "",
             stock = 100,
             image = "https://ugigvb-actividad1-08masw.s3.us-east-1.amazonaws.com/explodingKittens.jpg",
-            inactive = false,
+            inactive = 0,
             categoryId = 1,
             supplierId = 2
         )

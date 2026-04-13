@@ -24,7 +24,7 @@ data class ProductDto(
     val description: String?,
     val stock: Int,
     val image: String?,
-    val inactive: Boolean,
+    val inactive: Int,
     val categoryId: Int,
     val supplierId: Int
 )
