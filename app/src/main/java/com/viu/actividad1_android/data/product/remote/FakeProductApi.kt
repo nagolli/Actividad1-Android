@@ -3,6 +3,9 @@ package com.viu.actividad1_android.data.product.remote
 import com.viu.actividad1_android.data.product.remote.api.ProductApi
 import com.viu.actividad1_android.data.product.remote.dto.ProductDto
 import com.viu.actividad1_android.data.product.remote.dto.ProductFilterDto
+import com.viu.actividad1_android.data.product.remote.dto.ReviewDto
+import com.viu.actividad1_android.data.product.remote.dto.ReviewResponseDto
+import com.viu.actividad1_android.data.product.remote.dto.UserReviewDto
 
 /**
  * Implementación fake de [ProductApi] para entornos sin backend disponible.
@@ -114,4 +117,29 @@ class FakeProductApi : ProductApi {
 
             matchesName && matchesCategory && matchesSupplier && matchesMin && matchesMax
         }
+
+    override suspend fun getProductAverageRating(id: Int): Double? {
+        return if (mockProducts.any { it.id == id }) 4.5 else null
+    }
+
+    override suspend fun getProductReviews(id: Int): ReviewResponseDto {
+        return ReviewResponseDto(
+            data = listOf(
+                ReviewDto(
+                    productId = id,
+                    email = null,
+                    rating = 5,
+                    review = "Dolor possimus deserunt itaque nostrum deleniti iste amet pariatur. Accusamus tempore tempora dolor porro dignissimos odio deserunt.",
+                    user = UserReviewDto(email = "hadley79@example.com", name = "Susana")
+                ),
+                ReviewDto(
+                    productId = id,
+                    email = null,
+                    rating = 4,
+                    review = "Mollitia dolorem esse omnis non aut. Aspernatur dolor perspiciatis itaque aut sint quibusdam tempora amet.",
+                    user = UserReviewDto(email = "imohr@example.com", name = "Katherine")
+                )
+            )
+        )
+    }
 }

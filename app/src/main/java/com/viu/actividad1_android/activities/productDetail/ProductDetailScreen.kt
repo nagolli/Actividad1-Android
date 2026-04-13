@@ -5,9 +5,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.StarHalf
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.viu.actividad1_android.R
+import java.util.Locale
 
 /**
  * Pantalla que muestra la información detallada de un producto.
@@ -38,7 +42,12 @@ fun ProductDetailScreen(
         topBar = {
             TopAppBar(
                 windowInsets = WindowInsets(0.dp),
-                title = { Text(text = state.product?.name ?: stringResource(R.string.loading)) },
+                title = {
+                    Text(
+                        text = if (state.product != null) stringResource(R.string.product_detail_back) else stringResource(R.string.loading),
+                        fontSize = 14.sp
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -50,32 +59,41 @@ fun ProductDetailScreen(
             )
         }
     ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            contentAlignment = Alignment.Center
-        ) {
-            if (state.isLoading) {
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
                 CircularProgressIndicator()
-            } else if (state.error != null) {
+            }
+        } else if (state.error != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center
+            ) {
                 Text(text = state.error, color = MaterialTheme.colorScheme.error)
-            } else {
-                state.product?.let { product ->
-                    Column(
+            }
+        } else {
+            state.product?.let { product ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .verticalScroll(rememberScrollState())
+                        .padding(16.dp)
+                ) {
+                    AsyncImage(
+                        model = product.imageUrl,
+                        contentDescription = product.name,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                            .padding(16.dp)
-                    ) {
-                        AsyncImage(
-                            model = product.imageUrl,
-                            contentDescription = product.name,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(300.dp),
-                            contentScale = ContentScale.Fit
-                        )
+                            .fillMaxWidth()
+                            .height(300.dp),
+                        contentScale = ContentScale.Fit
+                    )
 
                         Spacer(modifier = Modifier.height(16.dp))
 
@@ -91,6 +109,19 @@ fun ProductDetailScreen(
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.SemiBold
                         )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        // Calificación con estrellas
+                        if (state.averageRating != null) {
+                            RatingStars(rating = state.averageRating)
+                        } else {
+                            Text(
+                                text = stringResource(R.string.product_detail_no_reviews),
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.outline
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(24.dp))
 
@@ -141,9 +172,117 @@ fun ProductDetailScreen(
                             text = product.description ?: stringResource(R.string.not_available),
                             fontSize = 14.sp
                         )
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        // Sección de Reseñas
+                        Text(
+                            text = stringResource(R.string.product_detail_reviews_title),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        if (state.reviews.isEmpty()) {
+                            Text(
+                                text = stringResource(R.string.product_detail_no_reviews_yet),
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.outline
+                            )
+                        } else {
+                            state.reviews.forEach { review ->
+                                ReviewItem(review = review)
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+/**
+ * Componente que muestra una reseña individual.
+ */
+@Composable
+fun ReviewItem(review: com.viu.actividad1_android.data.product.Review) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        )
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = review.userName,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+                RatingStarsSmall(rating = review.rating.toDouble())
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = review.review,
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+/**
+ * Componente que muestra una fila de estrellas pequeña para las reseñas.
+ */
+@Composable
+fun RatingStarsSmall(rating: Double) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        repeat(5) { index ->
+            val starIndex = index + 1
+            val icon = if (rating >= starIndex) Icons.Default.Star else Icons.Default.StarOutline
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+    }
+}
+
+/**
+ * Componente que muestra una fila de estrellas representando una calificación.
+ *
+ * @param rating Calificación media (de 0 a 5).
+ */
+@Composable
+fun RatingStars(rating: Double) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        repeat(5) { index ->
+            val starIndex = index + 1
+            val icon = when {
+                rating >= starIndex -> Icons.Default.Star
+                rating >= starIndex - 0.5 -> Icons.AutoMirrored.Filled.StarHalf
+                else -> Icons.Default.StarOutline
+            }
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = String.format(Locale.getDefault(), "%.1f/5", rating),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }

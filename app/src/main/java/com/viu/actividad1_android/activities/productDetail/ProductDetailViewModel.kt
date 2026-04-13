@@ -53,9 +53,21 @@ class ProductDetailViewModel(
             state = state.copy(isLoading = true, error = null)
             try {
                 val product = productRepository.getProduct(productId)
+                val rating = try {
+                    productRepository.getProductAverageRating(productId)
+                } catch (e: Exception) {
+                    null
+                }
+                val reviews = try {
+                    productRepository.getProductReviews(productId)
+                } catch (e: Exception) {
+                    emptyList()
+                }
                 state = state.copy(
                     isLoading = false,
-                    product = product
+                    product = product,
+                    averageRating = rating,
+                    reviews = reviews
                 )
             } catch (e: Exception) {
                 state = state.copy(

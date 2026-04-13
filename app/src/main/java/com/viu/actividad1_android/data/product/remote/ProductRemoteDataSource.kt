@@ -37,4 +37,18 @@ open class ProductRemoteDataSource(
      * @param body Objeto con los criterios de filtrado.
      */
     open suspend fun filter(body: ProductFilterDto) = api.filterProducts(body)
+
+    /**
+     * Obtiene la calificación media de un producto desde la API remota.
+     *
+     * @param id Identificador del producto.
+     */
+    open suspend fun getAverageRating(id: Int) = api.getProductAverageRating(id)
+
+    /**
+     * Obtiene las reseñas de un producto desde la API remota.
+     *
+     * @param id Identificador del producto.
+     */
+    open suspend fun getReviews(id: Int) = api.getProductReviews(id)
 }

@@ -1,6 +1,7 @@
 package com.viu.actividad1_android.data.product.repository
 
 import com.viu.actividad1_android.data.product.Product
+import com.viu.actividad1_android.data.product.Review
 import com.viu.actividad1_android.data.product.mapper.toDomain
 import com.viu.actividad1_android.data.product.remote.ProductRemoteDataSource
 import com.viu.actividad1_android.data.product.remote.dto.ProductFilterDto
@@ -43,4 +44,22 @@ open class ProductRepository(
      */
     suspend fun filterProducts(filter: ProductFilterDto): List<Product> =
         remote.filter(filter).map { it.toDomain() }
+
+    /**
+     * Obtiene la calificación media de un producto.
+     *
+     * @param id Identificador del producto.
+     * @return Calificación media del producto o null si no tiene reseñas.
+     */
+    suspend fun getProductAverageRating(id: Int): Double? =
+        remote.getAverageRating(id)
+
+    /**
+     * Obtiene las reseñas de un producto.
+     *
+     * @param id Identificador del producto.
+     * @return Lista de reseñas en formato de dominio.
+     */
+    suspend fun getProductReviews(id: Int): List<Review> =
+        remote.getReviews(id).data.map { it.toDomain() }
 }

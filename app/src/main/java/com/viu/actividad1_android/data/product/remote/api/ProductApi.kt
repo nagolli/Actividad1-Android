@@ -2,10 +2,8 @@ package com.viu.actividad1_android.data.product.remote.api
 
 import com.viu.actividad1_android.data.product.remote.dto.ProductDto
 import com.viu.actividad1_android.data.product.remote.dto.ProductFilterDto
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import com.viu.actividad1_android.data.product.remote.dto.ReviewResponseDto
+import retrofit2.http.*
 
 /**
  * Interfaz Retrofit para acceder a los endpoints remotos relacionados
@@ -41,4 +39,22 @@ interface ProductApi {
      */
     @POST("product/filter")
     suspend fun filterProducts(@Body body: ProductFilterDto): List<ProductDto>
+
+    /**
+     * Obtiene la calificación media de un producto.
+     *
+     * @param id Identificador del producto.
+     * @return Calificación media del producto.
+     */
+    @GET("review/{id}/average-rating")
+    suspend fun getProductAverageRating(@Path("id") id: Int): Double?
+
+    /**
+     * Obtiene las reseñas de un producto.
+     *
+     * @param id Identificador del producto.
+     * @return Lista de reseñas envueltas en un objeto ReviewResponseDto.
+     */
+    @GET("review/product/{id}")
+    suspend fun getProductReviews(@Path("id") id: Int): ReviewResponseDto
 }

@@ -1,7 +1,9 @@
 package com.viu.actividad1_android.data.product.mapper
 
 import com.viu.actividad1_android.data.product.Product
+import com.viu.actividad1_android.data.product.Review
 import com.viu.actividad1_android.data.product.remote.dto.ProductDto
+import com.viu.actividad1_android.data.product.remote.dto.ReviewDto
 
 /**
  * Convierte un [ProductDto] recibido desde la API remota en un modelo
@@ -19,3 +21,16 @@ fun ProductDto.toDomain() = Product(
     quantity = 0,
     imageUrl = image
 )
+
+/**
+ * Convierte un DTO de reseña en un modelo de dominio.
+ */
+fun ReviewDto.toDomain(): Review {
+    return Review(
+        productId = productId,
+        rating = rating,
+        review = review,
+        userName = user.name,
+        userEmail = user.email
+    )
+}
