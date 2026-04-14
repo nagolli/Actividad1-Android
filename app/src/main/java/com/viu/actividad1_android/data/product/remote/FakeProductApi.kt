@@ -129,14 +129,14 @@ class FakeProductApi : ProductApi {
                     productId = id,
                     email = null,
                     rating = 5,
-                    review = "Dolor possimus deserunt itaque nostrum deleniti iste amet pariatur. Accusamus tempore tempora dolor porro dignissimos odio deserunt.",
+                    review = "Recomendadísimo, las mejores tardes de mi vida.",
                     user = UserReviewDto(email = "hadley79@example.com", name = "Susana")
                 ),
                 ReviewDto(
                     productId = id,
                     email = null,
                     rating = 4,
-                    review = "Mollitia dolorem esse omnis non aut. Aspernatur dolor perspiciatis itaque aut sint quibusdam tempora amet.",
+                    review = "Esta bien, pero para la experiencia completa hacen falta expansiones.",
                     user = UserReviewDto(email = "imohr@example.com", name = "Katherine")
                 )
             )
