@@ -1,9 +1,11 @@
 package com.viu.actividad1_android.data.order.remote
 
+import com.viu.actividad1_android.data.order.remote.OrderRemoteDataSource
 import com.viu.actividad1_android.data.order.remote.api.OrderApi
 import com.viu.actividad1_android.data.order.remote.dto.OrderDto
 import com.viu.actividad1_android.data.order.remote.dto.OrderProductDto
 import com.viu.actividad1_android.data.order.remote.dto.PlaceOrderDto
+import com.viu.actividad1_android.data.product.repository.FakeProductRemoteDataSource
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -64,16 +66,19 @@ class FakeOrderApi : OrderApi {
     override suspend fun placeOrder(dto: PlaceOrderDto): OrderDto {
         val newId = (mockOrders.maxOfOrNull { it.id } ?: 0) + 1
 
+        val products = FakeProductRemoteDataSource().getAll();
         val newOrder = OrderDto(
             id = newId,
             date = nowString(),
             state = "Procesando",
-            products = dto.products.map {
+            products = dto.products.map { item ->
+                val prod = products.find { p -> p.id == item.productId }
+                    ?: throw IllegalStateException("Producto no encontrado: ${item.productId}")
                 OrderProductDto(
-                    id = it.productId,
-                    name = "Producto ${it.productId} (fake)",
-                    quantity = it.quantity,
-                    price = 9.99 // precio simulado
+                    id = item.productId,
+                    name = prod.name,
+                    quantity = item.quantity,
+                    price = prod.price
                 )
             }
         )

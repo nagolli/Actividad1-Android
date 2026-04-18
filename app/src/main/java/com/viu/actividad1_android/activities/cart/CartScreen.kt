@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 
 @Composable
 fun CartScreen(
@@ -16,6 +17,7 @@ fun CartScreen(
 ) {
 
     val state = viewModel.state.value
+    val scope = rememberCoroutineScope()
 
     if (state.items.isEmpty()) {
         Box(
@@ -103,7 +105,12 @@ fun CartScreen(
                     }
 
                     Button(
-                        onClick = onCheckout
+                    onClick = {
+                        scope.launch {
+                            viewModel.placeOrder()
+                            onCheckout()
+                        }
+                    }
                     ) {
                         Text("Hacer pedido")
                     }

@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.viu.actividad1_android.activities.cart.CartScreen
 import com.viu.actividad1_android.activities.cart.CartViewModel
+import com.viu.actividad1_android.activities.cart.CartViewModelFactory
 import com.viu.actividad1_android.activities.checkout.CheckoutScreen
 
 import com.viu.actividad1_android.activities.ordersList.OrderListScreen
@@ -43,7 +44,11 @@ import com.viu.actividad1_android.ui.topMenu.TopMenu
 fun AppNavigation() {
 
     val navController = rememberNavController()
-    val cartViewModel: CartViewModel = viewModel()
+    val cartViewModel: CartViewModel = viewModel(
+        factory = CartViewModelFactory(
+            orderRepository = OrderRepository(remote = orderFakeOrHttpDataSource())
+        )
+    )
 
     Scaffold(
         topBar = {
@@ -120,7 +125,7 @@ fun AppNavigation() {
             composable(InterfaceDefinitions.Cart.route) {
                 CartScreen(cartViewModel,
                     onCheckout = {
-                        navController.navigate(InterfaceDefinitions.Checkout.route)
+                        navController.navigate(InterfaceDefinitions.OrderList.route)
                     })
             }
 

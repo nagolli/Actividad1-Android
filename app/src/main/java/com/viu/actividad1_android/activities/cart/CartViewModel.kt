@@ -2,9 +2,11 @@ package com.viu.actividad1_android.activities.cart
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.viu.actividad1_android.data.order.repository.OrderRepository
 import com.viu.actividad1_android.data.product.Product
 
-class CartViewModel : ViewModel() {
+class CartViewModel(private val orderRepository: OrderRepository): ViewModel() {
 
     private val _state = mutableStateOf(CartUiState())
     val state = _state
@@ -45,5 +47,23 @@ class CartViewModel : ViewModel() {
 
     fun clearCart() {
         _state.value = CartUiState(emptyList())
+    }
+
+    suspend fun placeOrder(){
+        orderRepository.placeOrder(
+            _state.value.items
+        )
+    }
+}
+
+class CartViewModelFactory(
+    private val orderRepository: OrderRepository
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(CartViewModel::class.java)) {
+            return CartViewModel(orderRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -13,14 +13,20 @@ import com.viu.actividad1_android.data.order.remote.dto.PlaceOrderDto
  * - Si el backend responde: usa Retrofit.
  * - Si no: usa una implementación fake.
  */
+
 fun orderFakeOrHttpDataSource(): OrderRemoteDataSource {
     return if (ApiConfig.isBackendAvailable()) {
         val api = ApiConfig.createApi<OrderApi>()
         OrderRemoteDataSource(api)
     } else {
-        FakeOrderRemoteDataSource()
+        OrderRemoteDataSource(OrderApiProvider.fakeApi)
     }
 }
+
+object OrderApiProvider {
+    val fakeApi = FakeOrderApi()
+}
+
 
 /**
  * Fuente de datos remota fake para pedidos.
