@@ -1,5 +1,6 @@
 package com.viu.actividad1_android.activities.ordersList
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -52,6 +53,14 @@ fun OrderItem(
         }
     }
 
+    LaunchedEffect(pagerState.currentPage) {
+        android.util.Log.d("OrderItem", "order ${order.id} Página actual: ${pagerState.currentPage}")
+    }
+
+    LaunchedEffect(order.products.size) {
+        android.util.Log.d("OrderItem", "order ${order.id} Productos: ${order.products.size}")
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,6 +81,7 @@ fun OrderItem(
                     .weight(1f)
                     .height(120.dp)
             ) { page ->
+                Log.d("OrderItem", "order ${order.id} Dibujando página: $page con url ${order.products[page].imageUrl}")
                 val product = order.products[page]
                 AsyncImage(
                     model = product.imageUrl,

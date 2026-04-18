@@ -11,21 +11,15 @@ import com.viu.actividad1_android.data.product.Product
  *
  * @param currentProducts Lista de productos locales (catálogo completo).
  */
-fun OrderDto.toDomain(): Order {
-    return Order(
-        id = id,
-        date = date,
-        state = state,
-        products = products.map {
-            OrderProduct(
-                id = it.id,
-                name = it.name,
-                quantity = it.quantity,
-                price = it.price
-            )
-        }
-    )
-}
+fun OrderDto.toDomain(currentProducts: List<Product>) = Order(
+    id = id,
+    date = date,
+    state = state,
+    products = products.map { dto ->
+        val localProduct = currentProducts.firstOrNull { it.id == dto.id }
+        dto.toDomainProduct(localProduct)
+    }
+)
 
 /**
  * Convierte un OrderProductDto en un Product de dominio.

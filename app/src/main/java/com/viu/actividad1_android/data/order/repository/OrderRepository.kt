@@ -34,7 +34,7 @@ open class OrderRepository(
             remote = productFakeOrHttpDataSource()
         ).getProducts()
 
-        return remote.getAll().map { it.toDomain() }
+        return remote.getAll().map { it.toDomain(products) }
     }
 
     /**
@@ -47,7 +47,7 @@ open class OrderRepository(
             remote = productFakeOrHttpDataSource()
         ).getProducts()
 
-        return remote.getById(id).toDomain()
+        return remote.getById(id).toDomain(products)
     }
 
     /**
@@ -76,6 +76,6 @@ open class OrderRepository(
 
         val createdOrderDto = remote.placeOrder(dto)
 
-        return createdOrderDto.toDomain()
+        return createdOrderDto.toDomain(products.map { it.item })
     }
 }

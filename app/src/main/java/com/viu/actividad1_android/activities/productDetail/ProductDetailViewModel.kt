@@ -54,9 +54,7 @@ class ProductDetailViewModel(
                 Log.d("ProductDetailViewModel", "Añadido al carrito: ${product.name}")
                 cartViewModel.addItem(
                     CartItem(
-                        id = product.id,
-                        name = product.name,
-                        price = product.price,
+                        item = product,
                         quantity = state.quantity
                     )
                 )
