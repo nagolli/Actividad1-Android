@@ -10,6 +10,8 @@ import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -34,7 +36,8 @@ fun ProductDetailScreen(
     onBack: () -> Unit
 ) {
     val state = viewModel.state
-
+    val snackbarHostState = remember { SnackbarHostState() }
+    val message = viewModel.message.value
     Scaffold(
         topBar = {
             TopAppBar(
@@ -54,7 +57,8 @@ fun ProductDetailScreen(
                     }
                 }
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         if (state.isLoading) {
             Box(
@@ -159,7 +163,14 @@ fun ProductDetailScreen(
                         }
                         
                         Spacer(modifier = Modifier.height(16.dp))
-                        
+
+                        LaunchedEffect(message) {
+                            if (message != null) {
+                                snackbarHostState.showSnackbar(message)
+                                viewModel.message.value = null
+                            }
+                        }
+
                         Text(
                             text = stringResource(R.string.product_detail_description_title),
                             fontWeight = FontWeight.Bold,

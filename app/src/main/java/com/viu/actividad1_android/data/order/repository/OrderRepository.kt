@@ -1,5 +1,6 @@
 package com.viu.actividad1_android.data.order.repository
 
+import com.viu.actividad1_android.activities.cart.CartItem
 import com.viu.actividad1_android.data.order.Order
 import com.viu.actividad1_android.data.order.mapper.toDomain
 import com.viu.actividad1_android.data.order.remote.OrderRemoteDataSource
@@ -33,7 +34,7 @@ open class OrderRepository(
             remote = productFakeOrHttpDataSource()
         ).getProducts()
 
-        return remote.getAll().map { it.toDomain(products) }
+        return remote.getAll().map { it.toDomain() }
     }
 
     /**
@@ -46,7 +47,7 @@ open class OrderRepository(
             remote = productFakeOrHttpDataSource()
         ).getProducts()
 
-        return remote.getById(id).toDomain(products)
+        return remote.getById(id).toDomain()
     }
 
     /**
@@ -57,23 +58,24 @@ open class OrderRepository(
      * @param addressId Dirección seleccionada. Mockeada por la misma razón.
      */
     suspend fun placeOrder(
-        products: List<Pair<Int, Product>>,
+        products: List<CartItem>,
         email: String = "admin@admin.example.com",
         addressId: Int = 1,
     ): Order {
+
         val dto = PlaceOrderDto(
             email = email,
             addressId = addressId,
             products = products.map {
                 PlaceOrderProductDto(
-                    productId = it.second.id,
-                    quantity = it.first
+                    productId = it.id,
+                    quantity = it.quantity
                 )
             }
         )
 
         val createdOrderDto = remote.placeOrder(dto)
 
-        return createdOrderDto.toDomain(products.map { it.second })
+        return createdOrderDto.toDomain()
     }
 }

@@ -1,11 +1,14 @@
 package com.viu.actividad1_android.activities.productDetail
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.viu.actividad1_android.activities.cart.CartItem
+import com.viu.actividad1_android.activities.cart.CartViewModel
 import com.viu.actividad1_android.data.product.repository.ProductRepository
 import kotlinx.coroutines.launch
 
@@ -25,10 +28,14 @@ sealed class ProductDetailEvent {
  */
 class ProductDetailViewModel(
     private val productRepository: ProductRepository,
-    private val productId: Int
+    private val productId: Int,
+    private val cartViewModel: CartViewModel
 ) : ViewModel() {
 
     var state by mutableStateOf(ProductDetailState())
+        private set
+
+    var message = mutableStateOf<String?>(null)
         private set
 
     init {
@@ -43,7 +50,17 @@ class ProductDetailViewModel(
                 }
             }
             is ProductDetailEvent.OnAddToCart -> {
-                // Lógica de añadir al carrito con state.quantity
+                val product = state.product ?: return
+                Log.d("ProductDetailViewModel", "Añadido al carrito: ${product.name}")
+                cartViewModel.addItem(
+                    CartItem(
+                        id = product.id,
+                        name = product.name,
+                        price = product.price,
+                        quantity = state.quantity
+                    )
+                )
+                message.value = "${product.name} añadido al carrito"
             }
         }
     }
@@ -84,9 +101,10 @@ class ProductDetailViewModel(
  */
 class ProductDetailViewModelFactory(
     private val products: ProductRepository,
-    private val productId: Int
+    private val productId: Int,
+    private val cartViewModel: CartViewModel
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ProductDetailViewModel(products, productId) as T
+        return ProductDetailViewModel(products, productId, cartViewModel) as T
     }
 }

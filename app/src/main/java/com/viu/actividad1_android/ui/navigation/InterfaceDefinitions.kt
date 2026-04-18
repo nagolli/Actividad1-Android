@@ -13,8 +13,9 @@ sealed class InterfaceDefinitions(val route: String) {
     /** Pantalla principal: grid de productos. */
     object ProductGrid : InterfaceDefinitions("product_grid")
 
-    object Screen2 : InterfaceDefinitions("screen_2")
+    object Cart : InterfaceDefinitions("cart")
 
+    object Checkout : InterfaceDefinitions("checkout")
     object OrderList : InterfaceDefinitions("order_list")
 
     /**

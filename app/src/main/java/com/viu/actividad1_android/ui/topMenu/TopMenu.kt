@@ -8,10 +8,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -20,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.viu.actividad1_android.R
+import com.viu.actividad1_android.activities.cart.CartViewModel
 
 /**
  * Barra superior de navegación de la aplicación.
@@ -36,6 +40,7 @@ import com.viu.actividad1_android.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopMenu(
+    cartViewModel: CartViewModel,
     onChessClick: () -> Unit = {},
     onCartClick: () -> Unit = {},
     onUserClick: () -> Unit = {}
@@ -64,15 +69,24 @@ fun TopMenu(
                 )
             }
 
-            IconButton(
-                onClick = onCartClick,
-                modifier = Modifier.size(56.dp)
+            val state = cartViewModel.state.value
+            val itemCount = state.items.sumOf { it.quantity }
+
+            BadgedBox(
+                badge = {
+                    if (itemCount > 0) {
+                        Badge {
+                            Text(itemCount.toString())
+                        }
+                    }
+                }
             ) {
-                Icon(
-                    imageVector = Icons.Default.ShoppingCart,
-                    contentDescription = stringResource(R.string.topmenu_cart_description),
-                    modifier = Modifier.size(32.dp)
-                )
+                IconButton(onClick = onCartClick) {
+                    Icon(
+                        imageVector = Icons.Default.ShoppingCart,
+                        contentDescription = "Carrito"
+                    )
+                }
             }
 
             IconButton(

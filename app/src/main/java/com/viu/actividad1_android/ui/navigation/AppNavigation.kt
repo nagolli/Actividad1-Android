@@ -10,7 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.viu.actividad1_android.activities.activity2MVVM.Screen2
+import com.viu.actividad1_android.activities.cart.CartScreen
+import com.viu.actividad1_android.activities.cart.CartViewModel
+import com.viu.actividad1_android.activities.checkout.CheckoutScreen
+
 import com.viu.actividad1_android.activities.ordersList.OrderListScreen
 import com.viu.actividad1_android.activities.ordersList.OrderListViewModel
 import com.viu.actividad1_android.activities.ordersList.OrderListViewModelFactory
@@ -40,12 +43,14 @@ import com.viu.actividad1_android.ui.topMenu.TopMenu
 fun AppNavigation() {
 
     val navController = rememberNavController()
+    val cartViewModel: CartViewModel = viewModel()
 
     Scaffold(
         topBar = {
             TopMenu(
+                cartViewModel = cartViewModel,
                 onChessClick = { navController.navigate(InterfaceDefinitions.ProductGrid.route) },
-                onCartClick = { navController.navigate(InterfaceDefinitions.Screen2.route) },
+               { navController.navigate(InterfaceDefinitions.Cart.route) },
                 onUserClick = { navController.navigate(InterfaceDefinitions.OrderList.route) }
             )
         }
@@ -76,6 +81,21 @@ fun AppNavigation() {
                 )
             }
 
+            composable(InterfaceDefinitions.Checkout.route) {
+
+                val orderRepository = OrderRepository(
+                    remote = orderFakeOrHttpDataSource()
+                )
+
+                CheckoutScreen(
+                    orderRepository = orderRepository,
+                    onCancel = { navController.popBackStack() },
+                    onValidate = {
+                        // Exito
+                    }
+                )
+            }
+
             // Pantalla: Detalles de producto
             composable(
                 route = InterfaceDefinitions.ProductDetail.route,
@@ -85,7 +105,8 @@ fun AppNavigation() {
                 val viewModel: ProductDetailViewModel = viewModel(
                     factory = ProductDetailViewModelFactory(
                         products = ProductRepository(remote = productFakeOrHttpDataSource()),
-                        productId = productId
+                        productId = productId,
+                        cartViewModel = cartViewModel
                     )
                 )
 
@@ -96,8 +117,11 @@ fun AppNavigation() {
             }
 
             // Pantalla: Carrito
-            composable(InterfaceDefinitions.Screen2.route) {
-                Screen2(navController)
+            composable(InterfaceDefinitions.Cart.route) {
+                CartScreen(cartViewModel,
+                    onCheckout = {
+                        navController.navigate(InterfaceDefinitions.Checkout.route)
+                    })
             }
 
             // Pantalla: Historial de pedidos

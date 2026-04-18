@@ -20,7 +20,7 @@ data class Order(
     val id: Int,
     val date: String,
     val state: String,
-    val products: List<Product>
+    val products: List<OrderProduct>
 ) {
     fun totalPrice(): Double {
         return products.sumOf { it.price * it.quantity }
