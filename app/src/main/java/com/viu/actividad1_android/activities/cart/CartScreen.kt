@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,10 +49,19 @@ fun CartScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
 
-                        Column {
+                        AsyncImage(
+                            model = item.imageUrl,
+                            contentDescription = item.name,
+                            modifier = Modifier
+                                .size(80.dp)
+                        )
+
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
                             Text(
                                 text = item.name,
                                 style = MaterialTheme.typography.titleMedium
