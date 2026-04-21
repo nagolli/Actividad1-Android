@@ -53,6 +53,7 @@ class CartViewModel(private val orderRepository: OrderRepository): ViewModel() {
         orderRepository.placeOrder(
             _state.value.items
         )
+        clearCart();
     }
 }
 
