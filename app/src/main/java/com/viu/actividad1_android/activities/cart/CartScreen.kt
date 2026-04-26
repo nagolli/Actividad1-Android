@@ -7,9 +7,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.viu.actividad1_android.R
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
 
 @Composable
 fun CartScreen(
@@ -25,7 +28,7 @@ fun CartScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text("Tu carrito está vacío")
+            Text(text = stringResource(R.string.cart_empty))
         }
         return
     }
@@ -69,11 +72,12 @@ fun CartScreen(
 
                             Spacer(modifier = Modifier.height(4.dp))
 
-                            Text("Cantidad: ${item.quantity}")
-                            Text("Precio: ${item.price}€")
+                            Text(text = stringResource(R.string.quantity, item.quantity))
+                            Text(text = stringResource(R.string.price, item.price))
 
+                            val subtotal = item.price * item.quantity
                             Text(
-                                text = "Subtotal: ${item.price * item.quantity}€",
+                                text = stringResource(R.string.subtotal, subtotal),
                                 style = MaterialTheme.typography.labelMedium
                             )
                         }
@@ -81,7 +85,7 @@ fun CartScreen(
                         Button(
                             onClick = { viewModel.removeItem(item.id) }
                         ) {
-                            Text("Quitar")
+                            Text(text = stringResource(R.string.remove))
                         }
                     }
                 }
@@ -94,10 +98,11 @@ fun CartScreen(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
 
+                val total = state.items.sumOf { it.price * it.quantity }
+                val formattedTotal = NumberFormat.getCurrencyInstance().format(total)
+
                 Text(
-                    text = "Total: ${
-                        state.items.sumOf { it.price * it.quantity }
-                    }€",
+                    text = stringResource(R.string.total, formattedTotal),
                     style = MaterialTheme.typography.titleLarge
                 )
 
@@ -111,7 +116,7 @@ fun CartScreen(
                     OutlinedButton(
                         onClick = { viewModel.clearCart() }
                     ) {
-                        Text("Vaciar")
+                        Text(text = stringResource(R.string.clear))
                     }
 
                     Button(
@@ -122,7 +127,7 @@ fun CartScreen(
                         }
                     }
                     ) {
-                        Text("Hacer pedido")
+                        Text(text = stringResource(R.string.place_order))
                     }
                 }
             }

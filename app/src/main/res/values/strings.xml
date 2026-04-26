@@ -40,4 +40,13 @@
     <string name="product_detail_reviews_title">Reseñas de clientes</string>
     <string name="product_detail_no_reviews_yet">Aún no hay reseñas para este producto.</string>
 
+    <!-- Carrito -->
+    <string name="cart_empty">Tu carrito está vacío</string>
+    <string name="remove">Quitar</string>
+    <string name="clear">Vaciar</string>
+    <string name="place_order">Hacer pedido</string>
+    <string name="quantity">Cantidad: %1$d</string>
+    <string name="price">Precio: %1$.2f€</string>
+    <string name="total">Total: %1$s</string>
+    <string name="subtotal">Subtotal: %1$.2f€</string>
 </resources>
